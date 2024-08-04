@@ -14,8 +14,7 @@ endif()
 
 set(BUILD_EXAMPLES NO)
 add_subdirectory(ext/OWL)
-target_link_libraries(${appname} PRIVATE OWL)
-
+link_libraries(OWL)
 
 set(target_type )
 # if(OS_WINDOWS)
@@ -24,11 +23,11 @@ set(target_type )
 
 
 include_directories(include)
+include_directories(ext/OWL/include)
 
 file(GLOB_RECURSE sources
 	"include/*.hpp"
 	"src/*.hpp"
 	"src/*.cpp"
 )
-
 add_executable(${appname} ${target_type} ${sources})
