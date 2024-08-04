@@ -1,0 +1,3 @@
+[submodule "ext/OWL"]
+	path = ext/OWL
+	url = https://github.com/beProsto/OWL
