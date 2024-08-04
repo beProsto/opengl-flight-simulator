@@ -31,3 +31,9 @@ file(GLOB_RECURSE sources
 	"src/*.cpp"
 )
 add_executable(${appname} ${target_type} ${sources})
+
+add_custom_command(TARGET ${appname} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "$<TARGET_FILE:OWL>"
+    $<TARGET_FILE_DIR:${appname}>
+)
