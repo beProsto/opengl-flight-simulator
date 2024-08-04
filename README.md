@@ -2,6 +2,8 @@
 
 TODO: A better name :p
 
+General art direction: Low poly, low res, low fidelity. The rendered image should be pixelated.
+
 ## Build
 
 Using CMake:
