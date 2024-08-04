@@ -6,10 +6,18 @@ General art direction: Low poly, low res, low fidelity. The rendered image shoul
 
 ## Build
 
+Using Make:
+```
+make
+```
+
 Using CMake:
-
 ```
-cmake -B ./build 
-cmake --build ./build
+cmake -B ./build/ -G Ninja
+cmake --build ./build/
 ```
 
+## Running the app
+```
+./build/opengl_flight_simulator
+```
