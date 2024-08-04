@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(OpenGLFlightSimulator VERSION 0.2024.1)
 set(CMAKE_BUILD_TYPE Release)
+set(appname opengl_flight_simulator)
 
 if(WIN32)
 	set(OS_WINDOWS TRUE)
@@ -11,7 +12,12 @@ else()
 endif()
 
 
-set(TARGET_TYPE )
+set(BUILD_EXAMPLES NO)
+add_subdirectory(ext/OWL)
+target_link_libraries(${appname} PRIVATE OWL)
+
+
+set(target_type )
 # if(OS_WINDOWS)
 # 	set(TARGET_TYPE WIN32)
 # endif()
@@ -25,4 +31,4 @@ file(GLOB_RECURSE sources
 	"src/*.cpp"
 )
 
-add_executable(opengl_flight_simulator ${TARGET_TYPE} ${sources})
+add_executable(${appname} ${target_type} ${sources})
