@@ -3,3 +3,5 @@ That's because the DA-20 uses a stick instead of a yoke for aileron and elevator
 
 Resources:
 - [Wikipedia](https://en.wikipedia.org/wiki/Diamond_DA20_Katana)
+- [YouTube - Preflight](https://www.youtube.com/watch?v=lWyW2Lm53_w)
+- [YouTube - Another preflight](https://www.youtube.com/watch?v=_xRzIJQKqS0)
