@@ -11,7 +11,6 @@ int main(int argc, char** args) {
 	window.setContext(context);
 
 	window.gamepads.setCount(1);
-	
 	OWL::FPSLimiter eventDelay(60);
 	while(window.isRunning()) {
 		eventDelay.start();
