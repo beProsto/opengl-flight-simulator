@@ -11,26 +11,27 @@ else()
 	message(FATAL_ERROR "Platform Unsupported")
 endif()
 
-
-set(BUILD_EXAMPLES NO)
-add_subdirectory(ext/OWL)
-link_libraries(OWL)
-
 set(target_type )
 # if(OS_WINDOWS)
 # 	set(TARGET_TYPE WIN32)
 # endif()
 
+set(BUILD_EXAMPLES NO)
+add_subdirectory(ext/OWL)
+link_libraries(OWL)
+
+set(glad_source ext/glad/src/glad.c)
 
 include_directories(include)
 include_directories(ext/OWL/include)
+include_directories(ext/glad/include)
 
 file(GLOB_RECURSE sources
 	"include/*.hpp"
 	"src/*.hpp"
 	"src/*.cpp"
 )
-add_executable(${appname} ${target_type} ${sources})
+add_executable(${appname} ${target_type} ${sources} ${glad_source})
 
 add_custom_command(TARGET ${appname} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
