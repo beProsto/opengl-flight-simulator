@@ -1,8 +1,8 @@
 #include <pch.hpp>
-#include <iostream>
 #include <OWL/OWL.hpp>
 #include <OWL/Main.hpp>
 #include <OWL/Time.hpp>
+#include <glad/glad.h>
 #include <OWL/OpenGL.hpp>
 
 int main(int argc, char** args) {
@@ -10,7 +10,12 @@ int main(int argc, char** args) {
 	OWL::Window window;
 	window.setContext(context);
 
-	window.gamepads.setCount(1);
+	int version = gladLoadGLLoader((GLADloadproc)context.getLoaderFunction());
+	// int version = gladLoadGL();
+	if (version == 0) {
+        std::cout << "Failed to initialize OpenGL context\n";
+        return -1;
+    }
 	OWL::FPSLimiter eventDelay(60);
 	while(window.isRunning()) {
 		eventDelay.start();
@@ -29,6 +34,10 @@ int main(int argc, char** args) {
 			window.getSize().x
 		);
 
+		glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		context.swapBuffers();
 		eventDelay.end();
 	}
 
