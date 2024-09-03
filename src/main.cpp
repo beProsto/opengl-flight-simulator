@@ -9,6 +9,8 @@ int main(int argc, char** args) {
 	OWL::OpenGLContext context;
 	OWL::Window window;
 	window.setContext(context);
+    
+	std::cout << "Welcome to the OpenGL Flight Sim!\n";
 
 	int version = gladLoadGLLoader((GLADloadproc)context.getLoaderFunction());
 	// int version = gladLoadGL();
