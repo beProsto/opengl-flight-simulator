@@ -16,13 +16,17 @@ set(target_type )
 # 	set(TARGET_TYPE WIN32)
 # endif()
 
+add_subdirectory(ext/assimp)
+
 set(BUILD_EXAMPLES NO)
 add_subdirectory(ext/OWL)
 link_libraries(OWL)
 
 set(glad_source ext/glad/src/glad.c)
 
+
 include_directories(include)
+include_directories(ext/assimp/include)
 include_directories(ext/OWL/include)
 include_directories(ext/glad/include)
 
