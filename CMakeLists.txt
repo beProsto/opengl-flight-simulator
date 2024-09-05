@@ -17,6 +17,7 @@ set(target_type )
 # endif()
 
 add_subdirectory(ext/assimp)
+link_libraries(assimp)
 
 set(BUILD_EXAMPLES NO)
 add_subdirectory(ext/OWL)
@@ -46,4 +47,24 @@ add_custom_command(TARGET ${appname} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "$<TARGET_FILE:assimp>"
     $<TARGET_FILE_DIR:${appname}>
+)
+
+
+# This only needs to happen because this is a game lol
+
+file(GLOB_RECURSE resources
+    "resources/*.obj"
+    "resources/*.mtl"
+)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res)
+file(MAKE_DIRECTORY res)
+add_custom_command(TARGET ${appname} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${resources}
+    ${CMAKE_CURRENT_BINARY_DIR}/res
+)
+add_custom_command(TARGET ${appname} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${resources}
+    ${CMAKE_CURRENT_SOURCE_DIR}/res
 )
