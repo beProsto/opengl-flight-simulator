@@ -42,3 +42,8 @@ add_custom_command(TARGET ${appname} POST_BUILD
     "$<TARGET_FILE:OWL>"
     $<TARGET_FILE_DIR:${appname}>
 )
+add_custom_command(TARGET ${appname} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "$<TARGET_FILE:assimp>"
+    $<TARGET_FILE_DIR:${appname}>
+)
