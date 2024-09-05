@@ -5,6 +5,10 @@
 #include <glad/glad.h>
 #include <OWL/OpenGL.hpp>
 
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 int main(int argc, char** args) {
 	OWL::OpenGLContext context;
 	OWL::Window window;
@@ -12,12 +16,27 @@ int main(int argc, char** args) {
     
 	std::cout << "Welcome to the OpenGL Flight Sim!\n";
 
+	const aiScene * p_Scene = aiImportFile(
+		"./res/outside.obj",
+		aiProcess_GenSmoothNormals |
+		aiProcess_CalcTangentSpace |
+		aiProcess_Triangulate |
+		aiProcess_ImproveCacheLocality |
+		aiProcess_SortByPType
+	);
+
+	if (!p_Scene) {
+		std::cout << "Failed to open scene file: " << aiGetErrorString() << "\n";
+		return -2;
+	}
+
 	int version = gladLoadGLLoader((GLADloadproc)context.getLoaderFunction());
 	// int version = gladLoadGL();
 	if (version == 0) {
         std::cout << "Failed to initialize OpenGL context\n";
         return -1;
     }
+	
 	OWL::FPSLimiter eventDelay(60);
 	while(window.isRunning()) {
 		eventDelay.start();
