@@ -25,11 +25,17 @@ link_libraries(OWL)
 
 set(glad_source ext/glad/src/glad.c)
 
-
 include_directories(include)
 include_directories(ext/assimp/include)
 include_directories(ext/OWL/include)
 include_directories(ext/glad/include)
+
+
+if(OS_WINDOWS)
+    link_libraries(winmm)
+
+endif()
+
 
 file(GLOB_RECURSE sources
 	"include/*.hpp"

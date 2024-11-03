@@ -11,7 +11,7 @@
 
 int main(int argc, char** args) {
 	OWL::OpenGLContext context;
-	OWL::Window window;
+	OWL::Window window(OWL::Vec2ui(1280, 720), "OpenGL Flight Sim");
 	window.setContext(context);
     
 	std::cout << "Welcome to the OpenGL Flight Sim!\n";
@@ -31,12 +31,13 @@ int main(int argc, char** args) {
 	}
 
 	int version = gladLoadGLLoader((GLADloadproc)context.getLoaderFunction());
-	// int version = gladLoadGL();
 	if (version == 0) {
         std::cout << "Failed to initialize OpenGL context\n";
         return -1;
     }
-	
+	std::cout << "OpenGL: " << glGetString(GL_VERSION) << "\n";
+	std::cout << "GPU: " << glGetString(GL_RENDERER) << "\n";
+
 	OWL::FPSLimiter eventDelay(60);
 	while(window.isRunning()) {
 		eventDelay.start();
