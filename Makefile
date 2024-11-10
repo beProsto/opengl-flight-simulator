@@ -14,7 +14,7 @@ run: compile
 	$(RUN)
 
 compile: prepare
-	cmake --build ./build -j $(J)
+	cmake --build ./build -j$(J)
 prepare: 
 	cmake -B ./build -DASSIMP_WARNINGS_AS_ERRORS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug "-DCMAKE_C_COMPILER:FILEPATH=$(CC)" "-DCMAKE_CXX_COMPILER:FILEPATH=$(CXX)" -G "$(G)"
 
