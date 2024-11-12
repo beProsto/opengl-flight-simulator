@@ -137,7 +137,7 @@ int main(int argc, char **args) {
         ((window.getSize().x > window.getSize().y) ? window.getSize().y
                                                    : window.getSize().x);
 
-    glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+    glClearColor(0.1f, 0.5f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     for (Mesh &mesh : meshes) {
