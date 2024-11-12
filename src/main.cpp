@@ -1,20 +1,18 @@
-#include "OWL/Utility/Vec3.hpp"
 #include <OWL/Main.hpp>
 #include <OWL/OWL.hpp>
 #include <OWL/Time.hpp>
+#include <iostream>
+#include <ostream>
 #include <pch.hpp>
 
 #include <glad/glad.h>
 
 #include <OWL/OpenGL.hpp>
 
-#include <assimp/Importer.hpp>
-#include <assimp/cimport.h>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
 #include <vector>
 
 #include "./mesh.hpp"
+#include "math.hpp"
 
 int main(int argc, char **args) {
   OWL::OpenGLContext context;
@@ -22,6 +20,13 @@ int main(int argc, char **args) {
   window.setContext(context);
 
   std::cout << "Welcome to the OpenGL Flight Sim!\n";
+
+  Math::Matrix<float, 4, 4> A({1, 0, 2, 3, 1, 0, 3, 1, 0, 2, 3, 1});
+  Math::Matrix<float, 4, 4> B({1, 0, 2, 1, 1, 0, 2, 0});
+
+  std::cout << A << std::endl << B << std::endl;
+  A *= B;
+  std::cout << A;
 
   int version = gladLoadGLLoader((GLADloadproc)context.getLoaderFunction());
   if (version == 0) {
@@ -33,30 +38,18 @@ int main(int argc, char **args) {
 
   std::vector<Mesh> meshes = Mesh::loadFromOBJ("./res/outside.obj");
   // Create a shader program that includes a projection, view and model matrix
-  const char *vertexShaderSource =
-      "#version 330 core\n"
-      "layout(location = 0) in vec3 aPos;\n"
-      "layout(location = 1) in vec3 aNormal;\n"
-      "layout(location = 2) in vec2 aTexCoords;\n"
-      "uniform mat4 projection;\n"
-      "uniform mat4 view;\n"
-      "uniform mat4 model;\n"
-      "void main() {\n"
-      "  gl_Position = projection *  view * model * vec4(aPos / 2.0, 1.0);\n"
-      "}\n";
-  const char *fragmentShaderSource =
-      "#version 330 core\n"
-      "out vec4 FragColor;\n"
-      "void main() {\n"
-      "  FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-      "}\n";
+  std::string vertexShaderSource = Util::loadFileAsString("./res/std-mat.vs");
+  std::string fragmentShaderSource = Util::loadFileAsString("./res/std-mat.fs");
+
+  const char *vss = &vertexShaderSource[0];
+  const char *fss = &fragmentShaderSource[0];
 
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glShaderSource(vertexShader, 1, &vss, NULL);
   glCompileShader(vertexShader);
 
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glShaderSource(fragmentShader, 1, &fss, NULL);
   glCompileShader(fragmentShader);
 
   GLuint shaderProgram = glCreateProgram();

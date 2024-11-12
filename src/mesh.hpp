@@ -28,8 +28,8 @@ public:
   }
 
   void draw() const {
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(m_VAO);
+    glDrawElements(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   }
 
@@ -82,24 +82,24 @@ public:
   }
 
 private:
-  GLuint VAO, VBO, EBO;
-  GLsizei numIndices;
+  GLuint m_VAO, m_VBO, m_EBO;
+  GLsizei m_numIndices;
 
   void setupMesh(const std::vector<Vertex> &vertices,
                  const std::vector<uint32_t> &indices) {
-    numIndices = indices.size();
+    m_numIndices = indices.size();
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    glGenVertexArrays(1, &m_VAO);
+    glGenBuffers(1, &m_VBO);
+    glGenBuffers(1, &m_EBO);
 
-    glBindVertexArray(VAO);
+    glBindVertexArray(m_VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
                  &vertices[0], GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t),
                  &indices[0], GL_STATIC_DRAW);
 
