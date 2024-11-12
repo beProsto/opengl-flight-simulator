@@ -61,6 +61,8 @@ add_custom_command(TARGET ${appname} POST_BUILD
 file(GLOB_RECURSE resources
     "resources/*.obj"
     "resources/*.mtl"
+    "resources/*.vs"
+    "resources/*.fs"
 )
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res)
 file(MAKE_DIRECTORY res)
