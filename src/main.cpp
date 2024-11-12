@@ -1,6 +1,7 @@
 #include <OWL/Main.hpp>
 #include <OWL/OWL.hpp>
 #include <OWL/Time.hpp>
+#include <algorithm>
 #include <iostream>
 #include <ostream>
 #include <pch.hpp>
@@ -12,7 +13,40 @@
 #include <vector>
 
 #include "./mesh.hpp"
+#include "OWL/Utility/Vec2.hpp"
 #include "math.hpp"
+
+void projection(float m[16], float aspect) {
+  // Make a simple perspective projection matrix
+  float fov = 45.0f;
+  float near = 0.1f;
+  float far = 100.0f;
+  float top = near * tan(fov * 0.5f * 3.14159f / 180.0f);
+  float bottom = -top;
+  float right = top * aspect;
+  float left = -right;
+  float a = (right + left) / (right - left);
+  float b = (top + bottom) / (top - bottom);
+  float c = (far + near) / (far - near);
+  float d = (2.0f * far * near) / (far - near);
+  float projectionMatrix[] = {2.0f * near / (right - left),
+                              0.0f,
+                              0.0f,
+                              0.0f,
+                              0.0f,
+                              2.0f * near / (top - bottom),
+                              0.0f,
+                              0.0f,
+                              a,
+                              b,
+                              -c,
+                              -1.0f,
+                              0.0f,
+                              0.0f,
+                              -d,
+                              0.0f};
+  std::copy(projectionMatrix, projectionMatrix + 16, m);
+}
 
 int main(int argc, char **args) {
   OWL::OpenGLContext context;
@@ -21,12 +55,9 @@ int main(int argc, char **args) {
 
   std::cout << "Welcome to the OpenGL Flight Sim!\n";
 
-  Math::Matrix<float, 4, 4> A({1, 0, 2, 3, 1, 0, 3, 1, 0, 2, 3, 1});
-  Math::Matrix<float, 4, 4> B({1, 0, 2, 1, 1, 0, 2, 0});
-
-  std::cout << A << std::endl << B << std::endl;
-  A *= B;
-  std::cout << A;
+  Math::Mat4f proj = {1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                      2.0f, 2.0f, 2.0f, 2.0f, 1.0f, 2.0f, 3.0f, 4.0f};
+  std::cout << proj << std::endl << proj.Transpose();
 
   int version = gladLoadGLLoader((GLADloadproc)context.getLoaderFunction());
   if (version == 0) {
@@ -59,35 +90,8 @@ int main(int argc, char **args) {
 
   glUseProgram(shaderProgram);
 
-  // Make a simple perspective projection matrix
-  float fov = 45.0f;
-  float aspect = (float)window.getSize().x / (float)window.getSize().y;
-  float near = 0.1f;
-  float far = 100.0f;
-  float top = near * tan(fov * 0.5f * 3.14159f / 180.0f);
-  float bottom = -top;
-  float right = top * aspect;
-  float left = -right;
-  float a = (right + left) / (right - left);
-  float b = (top + bottom) / (top - bottom);
-  float c = (far + near) / (far - near);
-  float d = (2.0f * far * near) / (far - near);
-  float projectionMatrix[] = {2.0f * near / (right - left),
-                              0.0f,
-                              0.0f,
-                              0.0f,
-                              0.0f,
-                              2.0f * near / (top - bottom),
-                              0.0f,
-                              0.0f,
-                              a,
-                              b,
-                              -c,
-                              -1.0f,
-                              0.0f,
-                              0.0f,
-                              -d,
-                              0.0f};
+  float projectionMatrix[16];
+  projection(projectionMatrix, window.getAspect());
 
   // Set the projection matrix as a uniform
   GLint projectionLocation = glGetUniformLocation(shaderProgram, "projection");
@@ -120,6 +124,11 @@ int main(int argc, char **args) {
 
   // disable culling
   glDisable(GL_CULL_FACE); // todo remove
+  glEnable(GL_DEPTH_TEST);
+
+  // remember window size so you don't refresh the projection matrix when it's
+  // not needed
+  OWL::Vec2ui winSizePrev = window.getSize();
 
   OWL::FPSLimiter eventDelay(60);
   while (window.isRunning()) {
@@ -133,12 +142,18 @@ int main(int argc, char **args) {
       window.setFullScreen(!window.isFullScreen());
     }
 
-    unsigned int uiSize =
-        ((window.getSize().x > window.getSize().y) ? window.getSize().y
-                                                   : window.getSize().x);
+    if (window.getSize() != winSizePrev) {
+      glViewport(0, 0, window.getSize().x, window.getSize().y);
+
+      projection(projectionMatrix, window.getAspect());
+
+      // Set the projection matrix as a uniform
+      glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix);
+    }
+    winSizePrev = window.getSize();
 
     glClearColor(0.1f, 0.5f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (Mesh &mesh : meshes) {
       mesh.draw();

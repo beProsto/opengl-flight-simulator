@@ -1,5 +1,4 @@
 #pragma once
-#include <X11/X.h>
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
@@ -51,7 +50,7 @@ public:
     return result;
   }
   template <typename Y>
-  Matrix<T, N, M> operator+(const Matrix<Y, N, M> &other) {
+  Matrix<T, N, M> operator+(const Matrix<Y, N, M> &other) const {
     Matrix<T, N, M> result;
 
     for (uint32_t i = 0; i < N * M; i++) {
@@ -61,7 +60,7 @@ public:
     return result;
   }
   template <typename Y>
-  Matrix<T, N, M> operator-(const Matrix<Y, N, M> &other) {
+  Matrix<T, N, M> operator-(const Matrix<Y, N, M> &other) const {
     Matrix<T, N, M> result;
 
     for (uint32_t i = 0; i < N * M; i++) {
@@ -87,6 +86,16 @@ public:
   Matrix<T, N, M> &operator-=(const Matrix<Y, N, M> &other) {
     *this = (*this) - other;
     return *this;
+  }
+
+  Matrix<T, M, N> Transpose() const {
+    Matrix<T, M, N> transposed;
+    for (uint32_t i = 0; i < N * M; i++) {
+      uint32_t y = i / M;
+      uint32_t x = i % M;
+      transposed[x * N + y] = m_data[i];
+    }
+    return transposed;
   }
 
   friend std::ostream &operator<<(std::ostream &os,
