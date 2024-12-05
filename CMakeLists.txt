@@ -25,7 +25,7 @@ link_libraries(OWL)
 
 set(glad_source ext/glad/src/glad.c)
 
-include_directories(include)
+include_directories(src)
 include_directories(ext/assimp/include)
 include_directories(ext/OWL/include)
 include_directories(ext/glad/include)

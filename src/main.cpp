@@ -1,10 +1,7 @@
 #include <OWL/Main.hpp>
 #include <OWL/OWL.hpp>
 #include <OWL/Time.hpp>
-#include <algorithm>
 #include <iostream>
-#include <ostream>
-#include <pch.hpp>
 
 #include <glad/glad.h>
 
@@ -13,8 +10,9 @@
 #include <vector>
 
 #include "./mesh.hpp"
-#include "OWL/Utility/Vec2.hpp"
-#include "math.hpp"
+#include <util/pch.hpp>
+
+#include <joystick/joystick.hpp>
 
 void projection(float m[16], float aspect) {
   // Make a simple perspective projection matrix
@@ -49,9 +47,11 @@ void projection(float m[16], float aspect) {
 }
 
 int main(int argc, char **args) {
-  OWL::OpenGLContext context;
   OWL::Window window(OWL::Vec2ui(1280, 720), "OpenGL Flight Sim");
+  OWL::OpenGLContext context;
   window.setContext(context);
+
+  Joystick joy;
 
   std::cout << "Welcome to the OpenGL Flight Sim!\n";
 
@@ -123,7 +123,7 @@ int main(int argc, char **args) {
   glUniformMatrix4fv(modelLocation, 1, GL_FALSE, modelMatrix);
 
   // disable culling
-  glDisable(GL_CULL_FACE); // todo remove
+  glEnable(GL_CULL_FACE); 
   glEnable(GL_DEPTH_TEST);
 
   // remember window size so you don't refresh the projection matrix when it's

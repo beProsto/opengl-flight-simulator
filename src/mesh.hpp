@@ -2,7 +2,7 @@
 #include <OWL/Main.hpp>
 #include <OWL/OWL.hpp>
 #include <OWL/Time.hpp>
-#include <pch.hpp>
+#include <util/pch.hpp>
 
 #include <glad/glad.h>
 
